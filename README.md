@@ -20,10 +20,35 @@ TRPM8-bootcamp-project/
 │   ├─ quantum-descriptors.ipynb
 │   ├─ topological-descriptors.ipynb
 │   └─ *-descriptors.csv *-descriptors-standardized.csv
-└─3_train_test_split/
-    ├─ train_test_stratify.ipynb
-    ├─ descriptors_all.csv
-    └─ train*.csv test*.csv val*.csv
+├─3_train_test_split/
+│   ├─ train_test_stratify.ipynb
+│   ├─ descriptors_all.csv
+│   └─ train*.csv test*.csv val*.csv
+├─4_feature_selection/
+│   ├─ correlation_variance_filter/
+│   │   ├─ correlation_variance_filter.ipynb
+│   │   └─ *.csv
+│   ├─ genetic_algorithm/
+│   │   ├─ genetic_algorithm.ipynb
+│   │   ├─ random_forest/*.csv
+│   │   ├─ svm/*.csv
+│   │   ├─ xgboost/*.csv
+│   │   └─ plots/*
+│   ├─ Factor_Analysis/
+│   │   ├─ FA_feature_selection.ipynb
+│   │   ├─ FA_results/
+│   │   │   ├─ factor_components
+│   │   │   └─ selected_features
+│   │   └─ plots/*
+│   ├─ PCA/
+│   │   ├─ PCA_Feature_selection.ipynb
+│   │   ├─ PCA_results/
+│   │   │   └─ PCA_components
+│   │   └─ plots/*
+│   └─ random_forest_elimination/
+│       ├─ random_forest_elimination.ipynb
+│       └─ plots/*
+└─5_model_training/
 ```
 
 ---
@@ -76,3 +101,54 @@ This directory contains files and scripts for splitting the data into training a
 
 ---
 
+### 4_feature_selection
+
+This directory contains subdirectories and scripts for performing feature selection using various methods.
+
+#### correlation_variance_filter
+- **`correlation_variance_filter.ipynb`**:
+  - Removes features with a variance less than 0.2 and a correlation greater than 0.95.
+  - Inputs: Data from `3_train_test_split`.
+  - Outputs: Reduced-feature datasets in the same format as `3_train_test_split`.
+  - **Outputs**:
+    - `*.csv`: Same outputs as in `3_train_test_split`, with reduced features.
+
+#### genetic_algorithm
+- **`genetic_algorithm.ipynb`**:
+  - Implements a genetic algorithm for feature selection.
+  - Inputs: Data from `3_train_test_split`.
+  - Outputs: Reduced features for each machine learning model.
+  - **Outputs**:
+    - `random_forest/*.csv`, `svm/*.csv`, `xgboost/*.csv`: Reduced-feature datasets for each model.
+    - `plots/*`: Plots showing scores vs. generations in the genetic algorithm.
+
+#### Factor_Analysis
+- **`FA_feature_selection.ipynb`**:
+  - Applies factor analysis for feature selection.
+  - Inputs: Data from `3_train_test_split`.
+  - Outputs: Reduced-feature datasets and plots.
+  - **Subdirectories**:
+    - `FA_results/`:
+      - `factor_components/`: Contains factor components for dimensionality reduction.
+      - `selected_features/`: Contains selected features based on factor loadings.
+    - `plots/`: Contains plots such as factor loading distributions, pair plots, and scree plots.
+
+#### PCA
+- **`PCA_Feature_selection.ipynb`**:
+  - Performs feature selection using Principal Component Analysis (PCA).
+  - Inputs: Data from `3_train_test_split`.
+  - Outputs: Reduced-feature datasets and plots.
+  - **Subdirectories**:
+    - `PCA_results/`:
+      - `PCA_components/`: Contains PCA components for dimensionality reduction.
+    - `plots/`: Contains scree plots and principal component pair plots.
+
+#### random_forest_elimination
+- **`random_forest_elimination.ipynb`**:
+  - Applies random forest with recursive elimination for dimensionality reduction.
+  - Inputs: Data from `3_train_test_split`.
+  - Outputs: Reduced-feature datasets and plots.
+  - **Subdirectories**:
+    - `plots/`: Contains relevant plots for the feature elimination process.
+
+---
