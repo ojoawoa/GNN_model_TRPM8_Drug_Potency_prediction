@@ -57,7 +57,13 @@ TRPM8-bootcamp-project/
 │   │   └─ outputs/*  
 │   └─ xgboost/  
 │       ├─ xgboost.ipynb  
-│       └─ outputs/*  
+│       └─ outputs/*
+├─compare_models.ipynb
+│   ├─ regression_performance_summary.csv
+│   ├─ classification_performance_summary.csv
+│   ├─ model_comparisons_bar_plot.png
+│   ├─ radar_plot_accuracy.png
+│   └─ radar_plot_mse.png
 ```
 
 ---
@@ -202,4 +208,17 @@ Each model directory contains a corresponding Jupyter Notebook file for training
       - `[model]_regression_[filter_method]_residuals.png` (Residuals Plot)  
       - `[model]_regression_[filter_method]_predicted_vs_true.png` (Predicted vs. True Plot)  
 
+### compare_models.ipynb
+
+This notebook compares the performance of models trained in `5_model_training` across different feature selection methods:
+
+#### Outputs:
+- **Performance Summary CSV Files:**
+  - `regression_performance_summary.csv`: Summary of regression metrics (will be used as input for the plots).
+  - `classification_performance_summary.csv`: Summary of classification metrics (will be used as input for the plots).
+
+- **Visualization Files:**
+  - `model_comparisons_bar_plot.png`: Bar plots comparing performance metrics across models and feature selection methods.
+  - `radar_plot_accuracy.png`: Radar plot showing accuracy scores for different models and feature selection methods.
+  - `radar_plot_mse.png`: Radar plot showing 1/MSE values for regression models.
 ---
