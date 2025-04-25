@@ -20,6 +20,24 @@ We compare five GNN architectures (GIN, GCN, MPNN, GraphSAGE, GAT) through:
 - **Baseline comparison**: classical QSAR vs. GNN (bar & radar plots)
 
 ---
+## 🧠 GNN Architectures
+
+- **GIN (Graph Isomorphism Network)**  
+ uses MLPs to distinguish different graph structures; strong at capturing subtle subgraph differences.
+
+- **GCN (Graph Convolutional Network)**  
+  Classic spectral convolution: aggregates neighbor features via a normalized adjacency; simple and widely used.
+
+- **MPNN (Message Passing Neural Network)**  
+  Flexible message‐passing framework: learns custom messages along edges, then updates node embeddings—great for chemistry.
+
+- **GraphSAGE**  
+  samples and aggregates a fixed-size neighborhood; efficient for large graphs .
+
+- **GAT (Graph Attention Network)**  
+  Attention‐based aggregation: learns per-edge attention coefficients, allowing the model to weigh important neighbors more heavily.
+
+---
 
 ## 📂 Repository Structure
 
