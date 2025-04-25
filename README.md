@@ -48,6 +48,8 @@ GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION/
 │   └── TRPM8_regression_graph_dataset.pt
 ├── 4_train_test_split/
 │   ├── 10fold_cv/
+│   │   ├── regression/
+│   │   ├── classification/
 │   ├── .gitkeep
 │   └── Graph_dataset_train_test_val_random_split_and_Kfoldsplit.ipynb
 ├── 5_model_training/
@@ -79,7 +81,5 @@ GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION/
 ├── 6_baseline/
 │   ├── QSAR_classification_performance_summary.csv
 │   └── QSAR_regression_performance_summary.csv
-├── notebooks/          ← high-level demos & visualizations  
-├── scripts/            ← utility scripts (e.g. `print_tree.py`)  
-├── requirements.txt    ← Python dependencies  
-└── README.md           ← this file  
+│   └── GNN_vs_QSAR_comparison.ipynb
+└── README.md           
