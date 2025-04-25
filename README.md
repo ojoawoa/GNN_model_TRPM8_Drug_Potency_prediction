@@ -5,8 +5,7 @@ Predict TRPM8 ligand potency (classification & IC₅₀ regression) using Graph 
 ---
 
 ## 🚀 Project Overview
-
-This repository implements a QSAR pipeline on molecular graphs of TRPM8 ligands to solve:
+The goal of this project is to predict the potency of small-molecule ligands against the TRPM8 ion channel from ChEMBL, by learning directly on their molecular graph representations. We tackle two complementary tasks:
 
 1. **Potency classification** — Low / Medium / High  
 2. **IC₅₀ regression** — Continuous pChEMBL values
