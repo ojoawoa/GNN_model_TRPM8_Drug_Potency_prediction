@@ -1,162 +1,85 @@
-{
- "cells": [
-  {
-   "cell_type": "markdown",
-   "id": "d5788c3f",
-   "metadata": {
-    "vscode": {
-     "languageId": "markdown"
-    }
-   },
-   "source": [
-    "# README\n",
-    "# GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION\n",
-    "\n",
-    "Predict TRPM8 ligand potency (classification & pCHEMBL (-LogIC50) regression) using Graph Neural Networks.\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## 🚀 Project Overview\n",
-    "\n",
-    "The goal of this project is to predict the potency of small-molecule ligands against the TRPM8 ion channel from ChEMBL, by learning directly on their molecular graph representations. We tackle two complementary tasks:\n",
-    "\n",
-    "1. **Potency classification**  \n",
-    "   — Bin each compound into **Low / Medium / High** potency classes.  \n",
-    "\n",
-    "2. **pCHEMBL (-LogIC50) regression**  \n",
-    "   — Predict continuous pChEMBL (–log₁₀ IC₅₀) values.  \n",
-    "\n",
-    "We compare five popular GNN architectures (GIN, GCN, MPNN, GraphSAGE, GAT) in a fully automated pipeline that:\n",
-    "\n",
-    "1. **Prepares raw data**  \n",
-    "   Cleans TRPM8 activity measurements.  \n",
-    "2. **Extracts graph features**  \n",
-    "   Generates atom- and bond-level descriptors (e.g. partial charges, hybridization, one-hot atom types).  \n",
-    "3. **Builds PyG datasets**  \n",
-    "   Converts SMILES → PyTorch-Geometric Data objects for both tasks.  \n",
-    "4. **Splits & cross-validates**  \n",
-    "   Performs stratified 10-fold CV for classification and random 10-fold CV for regression.  \n",
-    "5. **Trains & tunes**  \n",
-    "   Sweeps hidden dimensions, dropout rates, and learning rates; uses early stopping and LR schedulers.  \n",
-    "6. **Ensembles & finalizes**  \n",
-    "   Averages fold predictions on the held-out test set and retrains a single final model on all train+val data.  \n",
-    "7. **Baselines & comparisons**  \n",
-    "   Benchmarks against classical QSAR models via bar and radar plots.\n",
-    "\n",
-    "```\n",
-    " ## 📂 Repository Structure\n",
-    "\n",
-    "GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION/\n",
-    "├── 1_data/\n",
-    "│   ├── initial_data/\n",
-    "│   │   ├── orca_outputs/\n",
-    "│   │   └── Pre-process.ipynb\n",
-    "│   └── processed/\n",
-    "│       ├── .gitkeep\n",
-    "│       ├── TRPM8_cleaned_preprocessed.csv\n",
-    "│       ├── TRPM8_graph_classification.csv\n",
-    "│       └── TRPM8_graph_regression.csv\n",
-    "├── 2_feature_extraction/\n",
-    "│   ├── .gitkeep\n",
-    "│   ├── Feature_extraction.ipynb\n",
-    "│   ├── mulliken_charges.json\n",
-    "│   ├── TRPM8_graph_features_class_w_atomic_onehot_encoder.csv\n",
-    "│   └── TRPM8_graph_features_regression_w_atomic_onehot_encoder.csv\n",
-    "├── 3_graph_data/\n",
-    "│   ├── .gitkeep\n",
-    "│   ├── GraphDataset_conversion_for_PyTorch_Geometric.ipynb\n",
-    "│   ├── TRPM8_classification_graph_dataset.pt\n",
-    "│   └── TRPM8_regression_graph_dataset.pt\n",
-    "├── 4_train_test_split/\n",
-    "│   ├── 10fold_cv/\n",
-    "│   |   ├── classification\n",
-    "│   |   ├── regression\n",
-    "│   ├── .gitkeep\n",
-    "│   └── Graph_dataset_train_test_val_random_split_and_Kfoldsplit.ipynb\n",
-    "├── 5_model_training/\n",
-    "│   ├── GAT/\n",
-    "│   │   ├── classification_10fold/\n",
-    "│   │   ├── regression_10fold/\n",
-    "│   │   ├── Final_GAT_training_classification.ipynb\n",
-    "│   │   └── Final_GAT_training_regression.ipynb\n",
-    "│   ├── GCN/\n",
-    "│   │   ├── classification_10fold/\n",
-    "│   │   ├── regression_10fold/\n",
-    "│   │   ├── Final_GCN_training_classification.ipynb\n",
-    "│   │   └── Final_GCN_training_regression.ipynb\n",
-    "│   ├── GIN/\n",
-    "│   │   ├── classification_10fold/\n",
-    "│   │   ├── regression_10fold/\n",
-    "│   │   ├── Final_GIN_training_classification.ipynb\n",
-    "│   │   └── Final_GIN_training_regression.ipynb\n",
-    "│   ├── GraphSAGE/\n",
-    "│   │   ├── classification_10fold/\n",
-    "│   │   ├── regression_10fold/\n",
-    "│   │   ├── Final_GraphSAGE_training_classification.ipynb\n",
-    "│   │   └── Final_GraphSAGE_training_regression.ipynb\n",
-    "│   └── MPNN/\n",
-    "│       ├── classification_10fold/\n",
-    "│       ├── regression_10fold/\n",
-    "│       ├── Final_MPNN_training_classification.ipynb\n",
-    "│       └── Final_MPNN_training_regression.ipynb\n",
-    "├── 6_baseline/\n",
-    "│   ├── QSAR_classification_performance_summary.csv\n",
-    "│   └── QSAR_regression_performance_summary.csv\n",
-    "│   └── GNN_vs_QSAR_comparison.ipynb\n",
-    "└── README.md\n",
-    "\n",
-    "```\n",
-    "USAGE\n",
-    "\n",
-    "Run end-to-end\n",
-    "\n",
-    "Step 1: preprocess → 1_data/\n",
-    "\n",
-    "Step 2: extract features → 2_feature_extraction/\n",
-    "\n",
-    "Step 3: build graphs → 3_graph_data/\n",
-    "\n",
-    "Step 4: split data → 4_train_test_split/\n",
-    "\n",
-    "Step 5: train & tune → 5_model_training/<ARCH>/…\n",
-    "\n",
-    "Step 6: ensemble & final evaluate → notebooks in notebooks/\n",
-    "\n",
-    "Step 7: baseline comparison → 6_baseline/\n",
-    "\n",
-    "## Inspect results\n",
-    "\n",
-    "Fold metrics, confusion matrices & AUC-ROC (classification)\n",
-    "\n",
-    "MAE/MSE/RMSE/R² curves & scatter plots (regression)\n",
-    "\n",
-    "Bar & radar plots vs. baseline QSAR\n",
-    "\n",
-    "\n",
-    "\n",
-    "\n"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python (myenv)",
-   "language": "python",
-   "name": "myenv"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.12.5"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+# GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION
+
+Predict TRPM8 ligand potency (classification & IC₅₀ regression) using Graph Neural Networks.
+
+---
+
+## 🚀 Project Overview
+
+This repository implements a QSAR pipeline on molecular graphs of TRPM8 ligands to solve:
+
+1. **Potency classification** — Low / Medium / High  
+2. **IC₅₀ regression** — Continuous pChEMBL values
+
+We compare five GNN architectures (GIN, GCN, MPNN, GraphSAGE, GAT) through:
+
+- **Data prep**: clean raw measurements, compute atom/bond descriptors  
+- **Graph construction**: build PyG `Data` objects  
+- **Splitting**: stratified (classification) or random (regression) 10-fold CV + held-out test  
+- **Training & tuning**: per-fold training, hyperparameter sweeps (hidden_dim, dropout, lr), early stopping, LR schedulers  
+- **Ensembling & final eval**: average fold predictions, retrain final model, plot confusion matrices/AUC (classification) and scatter/MSE/R² (regression)  
+- **Baseline comparison**: classical QSAR vs. GNN (bar & radar plots)
+
+---
+
+## 📂 Repository Structure
+
+```text
+GNN_MODEL_TRPM8_DRUG_POTENCY_PREDICTION/
+├── 1_data/
+│   ├── initial_data/
+│   │   ├── orca_outputs/
+│   │   └── Pre-process.ipynb
+│   └── processed/
+│       ├── .gitkeep
+│       ├── TRPM8_cleaned_preprocessed.csv
+│       ├── TRPM8_graph_classification.csv
+│       └── TRPM8_graph_regression.csv
+├── 2_feature_extraction/
+│   ├── .gitkeep
+│   ├── Feature_extraction.ipynb
+│   ├── mulliken_charges.json
+│   ├── TRPM8_graph_features_class_w_atomic_onehot_encoder.csv
+│   └── TRPM8_graph_features_regression_w_atomic_onehot_encoder.csv
+├── 3_graph_data/
+│   ├── .gitkeep
+│   ├── GraphDataset_conversion_for_PyTorch_Geometric.ipynb
+│   ├── TRPM8_classification_graph_dataset.pt
+│   └── TRPM8_regression_graph_dataset.pt
+├── 4_train_test_split/
+│   ├── 10fold_cv/
+│   ├── .gitkeep
+│   └── Graph_dataset_train_test_val_random_split_and_Kfoldsplit.ipynb
+├── 5_model_training/
+│   ├── GAT/
+│   │   ├── classification_10fold/
+│   │   ├── regression_10fold/
+│   │   ├── Final_GAT_training_classification.ipynb
+│   │   └── Final_GAT_training_regression.ipynb
+│   ├── GCN/
+│   │   ├── classification_10fold/
+│   │   ├── regression_10fold/
+│   │   ├── Final_GCN_training_classification.ipynb
+│   │   └── Final_GCN_training_regression.ipynb
+│   ├── GIN/
+│   │   ├── classification_10fold/
+│   │   ├── regression_10fold/
+│   │   ├── Final_GIN_training_classification.ipynb
+│   │   └── Final_GIN_training_regression.ipynb
+│   ├── GraphSAGE/
+│   │   ├── classification_10fold/
+│   │   ├── regression_10fold/
+│   │   ├── Final_GraphSAGE_training_classification.ipynb
+│   │   └── Final_GraphSAGE_training_regression.ipynb
+│   └── MPNN/
+│       ├── classification_10fold/
+│       ├── regression_10fold/
+│       ├── Final_MPNN_training_classification.ipynb
+│       └── Final_MPNN_training_regression.ipynb
+├── 6_baseline/
+│   ├── QSAR_classification_performance_summary.csv
+│   └── QSAR_regression_performance_summary.csv
+├── notebooks/          ← high-level demos & visualizations  
+├── scripts/            ← utility scripts (e.g. `print_tree.py`)  
+├── requirements.txt    ← Python dependencies  
+└── README.md           ← this file  
